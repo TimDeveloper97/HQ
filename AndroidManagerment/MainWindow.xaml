@@ -1,0 +1,133 @@
+﻿<Window x:Class="AndroidManagerment.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AndroidManagerment"
+        mc:Ignorable="d"
+        
+        xmlns:self="clr-namespace:DAO"
+        xmlns:model="clr-namespace:Models"
+        xmlns:here="clr-namespace:AndroidManagerment"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        WindowStartupLocation="CenterScreen" Icon="Icons/tools.png">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--#region Image Title-->
+        <Grid Grid.Row="0" Background="#a06946">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.7*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Name="lTitle"
+                       FontSize="23" FontWeight="SemiBold" FontStyle="Italic"
+                       Foreground="White" Height="30" 
+                       VerticalAlignment="Bottom"/>
+             
+            </Grid>
+            <Grid Grid.Column="1" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Name="lList"
+                       FontSize="23" FontWeight="SemiBold" FontStyle="Italic"
+                       Foreground="White"/>
+            </Grid>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.7*"/>
+            </Grid.ColumnDefinitions>
+  
+            <!--#region menu-->
+            <materialDesign:Card Grid.Column="0" Margin="5">
+                <TreeView Name="tvMenu" MinWidth="220" Padding="5">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type model:Menu}" ItemsSource="{Binding Path=Members}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="25" Stretch="Fill" Source="{Binding Path=Source}" Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding Path=Name}" Padding="0,3,0,0" 
+                                           FontStyle="Italic" FontWeight="SemiBold" FontSize="16"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,1.5,0,0">
+                                    <TextBlock Text=" [" Foreground="#1a75ff"  Padding="0,3,0,0"/>
+                                    <TextBlock Text="{Binding Path=Members.Count}" Foreground="#1a75ff"  Padding="0,3,0,0"/>
+                                    <TextBlock Text="]" Foreground="#1a75ff"  Padding="0,3,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type model:Member}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Stretch="UniformToFill" Source="/Icons/folder.png" Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding Name}"  Padding="0,3,0,0"/>
+                                <TextBlock Text=" (" Foreground="Green"  Padding="0,3,0,0"/>
+                                <TextBlock Text="{Binding Count}" Foreground="Green"  Padding="0,3,0,0"/>
+                                <TextBlock Text=" projects)" Foreground="Green"  Padding="0,3,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </materialDesign:Card>
+            <!--#endregion-->
+            
+            <!--#region Content-->
+            <materialDesign:Card Grid.Column="1" Margin="0,5,5,5">
+                <ListView Name="lvContent" SelectionChanged="lvContent_SelectionChanged">
+                    <ListView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type self:ProjectInfoDAO}">
+                            <Grid Width="650">
+                                <Label Background="#a06946" HorizontalAlignment="Left"
+                                       Width="3"/>
+                                <Grid Margin="8,0,0,0">
+                                    <StackPanel Margin="2" >
+                                        <TextBlock Text="{Binding Path=Title}" FontStyle="Italic" FontSize="16" 
+                                                   FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Path=Path}" Foreground="DimGray" FontSize="11"/>
+                                    </StackPanel>
+                                    <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button Name="btnDelete" Content="DELETE" Click="btnDelete_Click" Foreground="#ff5c33"
+                                                Width="60" Height="30" Style="{DynamicResource ResourceKey=MaterialDesignToolButton}"/>
+                                        <Button Name="btnEdit" Content="EDIT" Click="BtnEdit_Click" Foreground="#53c68c"
+                                                Width="60" Height="30" Style="{DynamicResource ResourceKey=MaterialDesignToolButton}"/>
+                                        <Button Name="btnCopy" Click="BtnCopy_Click" Foreground="#a64dff"
+                                                Width="30" Height="30" Style="{DynamicResource ResourceKey=MaterialDesignToolButton}">
+                                            <materialDesign:PackIcon Kind="ContentCopy"/>
+                                        </Button>
+                                    </WrapPanel>
+                                </Grid>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </ListView.Resources>
+                </ListView>
+            </materialDesign:Card>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!--#region Dialog : DialogContent="{Binding DialogObject}"-->
+            <materialDesign:DialogHost Identifier="RootDialog"
+                VerticalAlignment="Bottom" IsOpen="{Binding IsShow}" Margin="16">
+            </materialDesign:DialogHost>
+            <!--#endregion-->
+        </Grid>
+
+    </Grid>
+</Window>

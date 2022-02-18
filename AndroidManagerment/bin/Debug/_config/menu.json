@@ -1,0 +1,21 @@
+{
+	"menus":
+	[
+	{
+      "Name": "Game",
+      "Source": "/Icons/game.png"
+    },
+    {
+      "Name": "Mobile",
+      "Source": "/Icons/mobile.png"
+    },
+    {
+      "Name": "Web",
+      "Source": "/Icons/web.png"
+    },
+    {
+      "Name": "Window",
+      "Source": "/Icons/window.png"
+    }
+  ]
+}
